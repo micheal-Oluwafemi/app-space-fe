@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://api.myappspace.net/v1/user/:path*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;
