@@ -21,6 +21,8 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
   const navigate = useRouter();
 
+  console.log(isLoggedIn);
+
   const getCurrentUser = async () => {
     setLoggedIn(false);
     const { data, err } = await GetRequest({
@@ -43,7 +45,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
     if (!isLoggedIn && !loggedIn) {
       navigate.push("/auth/login");
     }
-  }, [isLoggedIn, loggedIn, navigate]);
+  }, [isLoggedIn, loggedIn]);
 
   if (isLoading) {
     return (
