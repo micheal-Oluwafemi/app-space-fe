@@ -9,8 +9,6 @@ import Link from "next/link";
 import { PostRequest } from "@/lib/http";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { globalUserLogin } from "@/redux/userReducer";
 
 const page = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,7 +16,6 @@ const page = () => {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const {
     register,
@@ -78,7 +75,7 @@ const page = () => {
         className="max-w-[632px] space-y-4"
       >
         <div className="grid gap-4 lg:grid-cols-2">
-          <div className="space-y-2">
+          <div className="space-y-1">
             <label
               htmlFor="firstName"
               className="block text-sm font-medium text-gray-700"
@@ -100,7 +97,7 @@ const page = () => {
             )}
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <label
               htmlFor="lastName"
               className="block text-sm font-medium text-gray-700"
@@ -122,7 +119,7 @@ const page = () => {
             )}
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <label
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
@@ -149,7 +146,7 @@ const page = () => {
             )}
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <label
               htmlFor="phoneNumber"
               className="block text-sm font-medium text-gray-700"
@@ -193,7 +190,7 @@ const page = () => {
             )}
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <label
               htmlFor="password"
               className="block text-sm font-medium text-gray-700"
@@ -237,7 +234,7 @@ const page = () => {
             )}
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <label
               htmlFor="confirmPassword"
               className="block text-sm font-medium text-gray-700"

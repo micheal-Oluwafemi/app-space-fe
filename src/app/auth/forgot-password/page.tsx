@@ -55,7 +55,7 @@ const page = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="mt-5 flex max-w-[632px] flex-col gap-5 lg:mt-7"
       >
-        <div className="space-y-2">
+        <div className="space-y-1">
           <label
             htmlFor="email"
             className="block text-sm font-medium text-gray-700"

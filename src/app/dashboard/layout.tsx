@@ -1,23 +1,78 @@
 "use client";
 
 import "../globals.css";
-import { useEffect, useState } from "react";
-import { Provider, useDispatch, useSelector } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import store from "@/redux/store";
-import { usePathname, useRouter } from "next/navigation";
-import { useMediaQuery } from "react-responsive";
-import { Toaster } from "sonner";
-import { Loader, Loader2 } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
+import TopNavbar from "@/components/TopNavbar";
+import { GetRequest } from "@/lib/http";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { globalUserLogin } from "@/redux/reducers/userReducer";
+import { useMediaQuery } from "react-responsive";
+import { cn } from "@/lib/utils";
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="font-geist flex h-dvh">
-      <Sidebar />
+  const [isLoading, setIsLoading] = useState(false);
+  const [closeSidebar, setCloseSidebar] = useState(true);
+  const isMobile = useMediaQuery({ query: "(max-width: 1100px)" });
 
-      <main className="dark:bg-darkBg no-scrollbar z-30 max-h-dvh flex-1 overflow-y-auto bg-white pt-10 md:pt-0">
-        {children}
-      </main>
+  const dispatch = useDispatch();
+
+  const navigate = useRouter();
+
+  const getCurrentUser = async () => {
+    const { data, err } = await GetRequest({
+      url: "/api/profile",
+      setState: setIsLoading,
+    });
+
+    console.log(data);
+
+    if (!err) {
+      dispatch(globalUserLogin(data.user));
+    } else {
+      // navigate.replace("/auth/login");
+    }
+  };
+
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="bg-baseColor-light/20 flex h-dvh flex-col items-center justify-center">
+        <img src="/icons/logoIcon.png" alt="logo-icon" className="w-32" />
+        <div className="loader animate-pulse"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="font-geist relative h-dvh w-full">
+      <div className="fixed top-0 z-50 w-full">
+        <TopNavbar setCloseSidebar={setCloseSidebar} />
+      </div>
+
+      <div className="flex h-full items-start justify-between">
+        <div
+          className={cn(
+            "flex h-full items-start justify-start overflow-hidden border-r border-gray-200 transition-all duration-300",
+            {
+              "w-[250px]": closeSidebar,
+              "w-[65px]": !closeSidebar,
+              hidden: isMobile && closeSidebar,
+            },
+          )}
+        >
+          <Sidebar closeSidebar={closeSidebar} />
+        </div>
+
+        <main className="dark:bg-darkBg no-scrollbar z-30 mt-[21px] max-h-dvh flex-1 overflow-y-auto bg-white p-3 pt-10 lg:px-5">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

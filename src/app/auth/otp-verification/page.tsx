@@ -102,8 +102,6 @@ const page = () => {
       setState: setIsLoading,
     });
 
-    console.log(data);
-
     if (!err) {
       if (typeof window !== "undefined") {
         localStorage.removeItem("OTPEmail");
@@ -131,7 +129,7 @@ const page = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="max-w-[632px] space-y-4"
       >
-        <div className="space-y-2">
+        <div className="space-y-1">
           <label
             htmlFor="otp"
             className="block text-sm font-medium text-gray-700"
@@ -186,7 +184,7 @@ const page = () => {
           )}
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1">
           <label
             htmlFor="password"
             className="block text-sm font-medium text-gray-700"
@@ -229,7 +227,7 @@ const page = () => {
           )}
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1">
           <label
             htmlFor="confirmPassword"
             className="block text-sm font-medium text-gray-700"

@@ -129,7 +129,77 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply text-foreground bg-white;
+    @apply text-foreground overflow-x-hidden bg-white;
+  }
+}
+
+.toastClassName {
+  @apply font-geist;
+}
+
+.animate-caret-blink {
+  animation: caret-blink 1.25s ease-out infinite;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 40px;
+  aspect-ratio: 0.65;
+  --c: no-repeat linear-gradient(#78429c 0 0);
+  background:
+    var(--c) 0% 50%,
+    var(--c) 50% 50%,
+    var(--c) 100% 50%;
+  animation: l7 1s infinite linear alternate;
+}
+
+@keyframes l7 {
+  0% {
+    background-size:
+      20% 50%,
+      20% 50%,
+      20% 50%;
+  }
+  20% {
+    background-size:
+      20% 20%,
+      20% 50%,
+      20% 50%;
+  }
+  40% {
+    background-size:
+      20% 100%,
+      20% 20%,
+      20% 50%;
+  }
+  60% {
+    background-size:
+      20% 50%,
+      20% 100%,
+      20% 20%;
+  }
+  80% {
+    background-size:
+      20% 50%,
+      20% 50%,
+      20% 100%;
+  }
+  100% {
+    background-size:
+      20% 50%,
+      20% 50%,
+      20% 50%;
   }
 }
 
@@ -142,15 +212,5 @@
   20%,
   50% {
     opacity: 0;
-  }
-}
-
-@layer utilities {
-  .animate-caret-blink {
-    animation: caret-blink 1.25s ease-out infinite;
-  }
-
-  .toastClassName {
-    @apply font-geist;
   }
 }

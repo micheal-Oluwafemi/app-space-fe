@@ -15,15 +15,12 @@ import {
 import { businessTypes, productType } from "@/constants";
 import { Button } from "@/components/ui/button";
 import { Info, Loader2 } from "lucide-react";
-import { useDispatch } from "react-redux";
-import { setStoreUrl } from "@/redux/userReducer";
 import { toast } from "sonner";
 import { PostRequest } from "@/lib/http";
 import { useRouter } from "next/navigation";
 
-const Page = () => {
+const SetupStore = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const {
     handleSubmit,
     register,
@@ -32,7 +29,8 @@ const Page = () => {
     setValue,
   } = useForm();
   const [preview, setPreview] = useState<string | null>(null);
-  const dispatch = useDispatch();
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imageError, setImageError] = useState<string | null>(null);
   const router = useRouter();
 
   // Watched Form Fields
@@ -41,6 +39,12 @@ const Page = () => {
   const product = watch("product_type");
 
   const onSubmit = async (formData: any) => {
+    if (!selectedImage) {
+      setImageError("Business logo is required");
+      toast.error("Please upload a business logo");
+      return;
+    }
+
     if (!industry || !product) {
       toast.info("Form Error", {
         description: "Please fill in all required fields.",
@@ -48,13 +52,22 @@ const Page = () => {
       return;
     }
 
-    dispatch(setStoreUrl(formData.store_url));
-    const { store_url, ...removedStoreUrl } = formData;
+    // Using formAppend because of file Upload
+    const submitData = new FormData();
 
-    console.log(removedStoreUrl);
-    const { data, err } = await PostRequest({
+    // Add the file to FormData
+    submitData.append("store_logo", selectedImage);
+
+    // Add other form fields to FormData
+    const { store_url, ...otherFormData } = formData;
+
+    for (const key in otherFormData) {
+      submitData.append(key, otherFormData[key]);
+    }
+
+    const { err } = await PostRequest({
       url: "/api/store/create",
-      body: removedStoreUrl,
+      body: submitData,
       setState: setIsSubmitting,
     });
 
@@ -68,7 +81,30 @@ const Page = () => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    setImageError(null);
+
     if (file) {
+      // Validate file type
+      const validTypes = ["image/jpeg", "image/png", "image/jpg"];
+      if (!validTypes.includes(file.type)) {
+        setImageError("The store logo must be a JPEG, PNG, or JPG image.");
+        setSelectedImage(null);
+        setPreview(null);
+        return;
+      }
+
+      // Validate file size (optional, e.g., max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setImageError("Image size should be less than 5MB");
+        setSelectedImage(null);
+        setPreview(null);
+        return;
+      }
+
+      // If validation passes, set the selected image
+      setSelectedImage(file);
+
+      // Create preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result as string);
@@ -96,7 +132,6 @@ const Page = () => {
               Provide Some Insights About Your Business.
             </p>
           </div>
-
           <img
             src="/icons/logoIcon.png"
             alt="logo-icon"
@@ -131,11 +166,8 @@ const Page = () => {
                 <input
                   type="file"
                   id="logo"
-                  accept="image/*"
+                  accept="image/jpeg, image/png, image/jpg"
                   className="hidden"
-                  {...register("store_logo", {
-                    required: "This Field is required",
-                  })}
                   onChange={handleImageChange}
                   style={{ display: "none" }}
                 />
@@ -147,11 +179,8 @@ const Page = () => {
                   Change Image
                 </button>
               </div>
-
-              {errors.store_logo && !preview && (
-                <p className="text-xs text-red-500">
-                  {errors.store_logo.message?.toString()}
-                </p>
+              {imageError && (
+                <p className="text-xs text-red-500">{imageError}</p>
               )}
             </div>
 
@@ -223,12 +252,10 @@ const Page = () => {
                     })}
                     className="rounded-r-none bg-white text-sm placeholder:text-sm"
                   />
-
                   <div className="">
                     <p className="px-3 font-medium">.appstore.shop</p>
                   </div>
                 </div>
-
                 {errors.store_url && !storeName && (
                   <p className="text-xs text-red-500">
                     {errors.store_url.message?.toString()}
@@ -270,7 +297,6 @@ const Page = () => {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
-
                 {errors.industry_type && (
                   <p className="text-xs text-red-500">
                     {errors.industry_type.message?.toString()}
@@ -287,7 +313,6 @@ const Page = () => {
                   Product Type
                   <span className="text-red-500"> *</span>
                 </label>
-
                 <Select
                   value={watch("product_type")}
                   onValueChange={(value) => setValue("product_type", value)}
@@ -306,7 +331,6 @@ const Page = () => {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
-
                 {errors.product_type && (
                   <p className="text-xs text-red-500">
                     {errors.product_type.message?.toString()}
@@ -372,4 +396,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default SetupStore;

@@ -9,19 +9,11 @@ import Link from "next/link";
 import { PostRequest } from "@/lib/http";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import { globalUserLogin } from "@/redux/userReducer";
 
 const Page = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const dispatch = useDispatch();
-
-  const hasOnboarded = useSelector(
-    (state: any) => state.user.hasOnboarded.storeUrl,
-  );
 
   const {
     register,
@@ -42,11 +34,9 @@ const Page = () => {
     });
 
     if (!err) {
-      console.log(data);
-      dispatch(globalUserLogin(data.data.user));
       toast.success("Successfully logged in");
       localStorage.setItem("user-token", data.data.token.access_token);
-      // router.push("/auth/verify-email");
+      router.push("/dashboard");
     } else {
       toast.error(err);
     }
@@ -67,7 +57,7 @@ const Page = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="max-w-[632px] space-y-4"
       >
-        <div className="space-y-2">
+        <div className="space-y-1">
           <label
             htmlFor="email"
             className="block text-sm font-medium text-gray-700"
@@ -90,7 +80,7 @@ const Page = () => {
           )}
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1">
           <label
             htmlFor="password"
             className="block text-sm font-medium text-gray-700"

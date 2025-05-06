@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { globalUserLogin } from "@/redux/userReducer";
+import { globalUserLogin } from "@/redux/reducers/userReducer";
 
 const VerifyEmail = () => {
   const [loading, setLoading] = useState(false);
@@ -24,7 +24,6 @@ const VerifyEmail = () => {
   const [countdown, setCountdown] = useState(0);
 
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const {
     handleSubmit,
@@ -64,7 +63,6 @@ const VerifyEmail = () => {
     });
 
     if (!err) {
-      dispatch(globalUserLogin(data.data.user));
       localStorage.removeItem("user-email");
       localStorage.setItem("user-token", data.data.token.access_token);
       toast.success("Email verified successfully");

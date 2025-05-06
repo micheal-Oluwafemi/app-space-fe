@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   user: null,
   email: "",
+  setSelectedStore: "",
   hasOnboarded: {
     storeUrl: "",
   },
@@ -23,12 +24,13 @@ const userSlice = createSlice({
       state.email = "";
       state.isAuthenticated = false;
     },
-    setStoreUrl: (state, action) => {
-      state.hasOnboarded.storeUrl = action.payload; // Set the storeUrl
+    setSelectedStore: (state, action) => {
+      state.setSelectedStore = action.payload;
+      localStorage.setItem("selectedStore", action.payload);
     },
   },
 });
 
-export const { globalUserLogin, globalUserLogout, setStoreUrl } =
+export const { globalUserLogin, globalUserLogout, setSelectedStore } =
   userSlice.actions;
 export default userSlice.reducer;

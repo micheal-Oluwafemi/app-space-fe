@@ -31,7 +31,7 @@ const page = () => {
           </div>
 
           <Link
-            href="/auth/setup-store"
+            href="/dashboard"
             className="bg-baseColor hover:bg-baseColor-light w-fit rounded-md px-4 py-2 text-center font-medium text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500"
           >
             Continue

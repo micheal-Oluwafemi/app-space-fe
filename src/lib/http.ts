@@ -1,25 +1,19 @@
 import { GetRequestProps, PostRequestProps } from "@/types/http-request";
 import axios from "axios";
 
-// Helper function to extract error messages
 const extractErrorMessages = (
   error: any,
   defaultErrorMessage: string | undefined,
 ): string => {
   if (error.response && error.response.data) {
-    // If we have detailed errors object, use that
     if (error.response.data.errors) {
       const errorMessages = Object.values(error.response.data.errors)
         .flat()
         .join(". ");
       return errorMessages;
-    }
-    // If only message is present, use that
-    else if (error.response.data.message) {
+    } else if (error.response.data.message) {
       return error.response.data.message;
-    }
-    // Handle errors in the format { err: [messages] }
-    else if (error.response.data.err && error.response.data.err[0]) {
+    } else if (error.response.data.err && error.response.data.err[0]) {
       return error.response.data.err[0];
     }
   }
@@ -35,11 +29,12 @@ export const GetRequest = async ({
     if (setState) {
       setState(true);
     }
-    const token = localStorage.getItem("user-token");
+    const Authorization = "Bearer " + localStorage.getItem("user-token");
 
     const { data } = await axios.get(url, {
       headers: {
-        token,
+        Authorization,
+        Accept: "application/json",
       },
     });
 
@@ -100,11 +95,11 @@ export const PatchJSON = async ({
     if (setState) {
       setState(true);
     }
-    const token = localStorage.getItem("user-token");
+    const Authorization = "Bearer " + localStorage.getItem("user-token");
 
     const { data } = await axios.patch(url, body, {
       headers: {
-        token,
+        Authorization,
       },
     });
 
@@ -133,12 +128,13 @@ export const PatchAppend = async ({
     if (setState) {
       setState(true);
     }
-    const token = localStorage.getItem("user-token");
+    const Authorization = "Bearer " + localStorage.getItem("user-token");
+
     body.append("_method", "PATCH");
 
     const { data } = await axios.post(url, body, {
       headers: {
-        token,
+        Authorization,
       },
     });
 
@@ -166,11 +162,11 @@ export const DeleteRequest = async ({
     if (setState) {
       setState(true);
     }
-    const token = localStorage.getItem("user-token");
+    const Authorization = "Bearer " + localStorage.getItem("user-token");
 
     const { data } = await axios.delete(url, {
       headers: {
-        token,
+        Authorization,
       },
     });
 
