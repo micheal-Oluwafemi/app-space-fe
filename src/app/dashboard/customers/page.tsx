@@ -26,13 +26,15 @@ const page = () => {
   };
 
   return (
-    <div className="h-full w-full pt-5 pb-10">
-      <div className="flex w-full flex-col items-center justify-between lg:flex-row">
+    <div className="h-full w-full pt-3 pb-10">
+      <div className="flex w-full flex-col justify-between gap-3 lg:flex-row lg:items-center">
         <PageHeaders pageType="Customers" />
-        <Button className="cursor-pointer font-medium text-white">
+
+        <Button className="w-fit cursor-pointer font-medium text-white">
           Add Customer
         </Button>
       </div>
+
       <CustomerCards isFetching={isFetching} />
       <div>
         <div className="mt-14 rounded-lg bg-gray-50 p-2 shadow-sm">

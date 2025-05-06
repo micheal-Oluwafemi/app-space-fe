@@ -32,7 +32,7 @@ const page = () => {
   };
 
   return (
-    <div className="h-full w-full pt-5 pb-10">
+    <div className="h-full w-full pt-3 pb-10">
       <PageHeaders pageType="Orders" />
       <div>
         <OrderCards isFetching={isFetching} />

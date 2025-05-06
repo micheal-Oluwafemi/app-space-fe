@@ -210,7 +210,7 @@ const SetupStore = () => {
   };
 
   return (
-    <div className="w-full pt-5 pb-10 lg:flex lg:items-center lg:justify-center lg:pb-0">
+    <div className="w-full pt-3 pb-10 lg:flex lg:items-center lg:justify-center lg:pb-0">
       <div className="">
         <div className="flex w-full flex-col justify-between gap-3 lg:flex-row lg:items-center">
           <PageHeaders pageType="Store Information" />
