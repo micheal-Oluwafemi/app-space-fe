@@ -27,8 +27,6 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
       setState: setIsLoading,
     });
 
-    console.log(data);
-
     if (!err) {
       dispatch(globalUserLogin(data.user));
     } else {
@@ -43,7 +41,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
   if (isLoading) {
     return (
       <div className="bg-baseColor-light/20 flex h-dvh flex-col items-center justify-center">
-        <img src="/icons/logoIcon.png" alt="logo-icon" className="w-32" />
+        {/* <img src="/icons/logoIcon.png" alt="logo-icon" className="w-32" /> */}
         <div className="loader animate-pulse"></div>
       </div>
     );
