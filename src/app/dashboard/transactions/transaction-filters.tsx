@@ -17,7 +17,14 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-const TransactionFilters = ({ setFilters, filters }) => {
+interface TransactionFilerProps {
+  setFilters: React.Dispatch<React.SetStateAction<{ status: string | null }>>;
+  filters: {
+    status: string | null;
+  };
+}
+
+const TransactionFilters = ({ setFilters, filters }: TransactionFilerProps) => {
   const [active, setActive] = useState("All");
 
   return (
