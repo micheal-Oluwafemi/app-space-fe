@@ -32,7 +32,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
     if (!err) {
       dispatch(globalUserLogin(data.user));
     } else {
-      // navigate.replace("/auth/login");
+      navigate.replace("/auth/login");
     }
   };
 
