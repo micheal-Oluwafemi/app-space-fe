@@ -1,9 +1,9 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatter } from "@/lib/utils";
-import { CheckCheckIcon, Tag } from "lucide-react";
+import { CheckCheckIcon, ShoppingBag, Tag } from "lucide-react";
 import React from "react";
-import { CgFileDocument } from "react-icons/cg";
-import { HiMiniExclamationTriangle } from "react-icons/hi2";
+import { CgFileDocument, CgShoppingBag } from "react-icons/cg";
+import { HiMiniExclamationTriangle, HiShoppingBag } from "react-icons/hi2";
 
 interface TransactionCardsProps {
   isFetching: boolean;
@@ -15,11 +15,13 @@ const ProductCards = ({ isFetching }: TransactionCardsProps) => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="flex h-[120px] flex-col justify-between rounded-lg border p-3">
           <div className="flex items-center justify-between">
-            <h4 className="text-base font-medium text-gray-700 uppercase">
-              Total Transactions
+            <h4 className="text-base font-medium text-gray-700">
+              Total Products
             </h4>
 
-            <CgFileDocument className="text-green-500" />
+            <div className="flex size-7 items-center justify-center rounded-sm bg-green-100">
+              <HiShoppingBag size={20} className="text-green-500" />
+            </div>
           </div>
 
           {isFetching ? (
@@ -35,11 +37,13 @@ const ProductCards = ({ isFetching }: TransactionCardsProps) => {
 
         <div className="flex h-[120px] flex-col justify-between rounded-lg border p-3">
           <div className="flex items-center justify-between">
-            <h4 className="text-base font-medium text-gray-700 uppercase">
-              Returns (NGN)
+            <h4 className="text-base font-medium text-gray-700">
+              Product Value
             </h4>
 
-            <Tag className="text-blue-500" />
+            <div className="flex size-7 items-center justify-center rounded-sm bg-blue-100">
+              <HiShoppingBag className="text-blue-500" />
+            </div>
           </div>
           {isFetching ? (
             <div className="flex items-center gap-2 text-2xl">
@@ -55,11 +59,13 @@ const ProductCards = ({ isFetching }: TransactionCardsProps) => {
 
         <div className="flex h-[120px] flex-col justify-between rounded-lg border p-3">
           <div className="flex items-center justify-between">
-            <h4 className="text-base font-medium text-gray-700 uppercase">
-              Fulfilled
+            <h4 className="text-base font-medium text-gray-700">
+              Product Sold
             </h4>
 
-            <CheckCheckIcon className="text-orange-700" />
+            <div className="flex size-7 items-center justify-center rounded-sm bg-purple-100">
+              <HiShoppingBag className="text-purple-700" />
+            </div>
           </div>
 
           {isFetching ? (
@@ -73,11 +79,13 @@ const ProductCards = ({ isFetching }: TransactionCardsProps) => {
 
         <div className="flex h-[120px] flex-col justify-between rounded-lg border p-3">
           <div className="flex items-center justify-between">
-            <h4 className="text-base font-medium text-gray-700 uppercase">
-              Unpaid
+            <h4 className="text-base font-medium text-gray-700">
+              Out of Stock
             </h4>
 
-            <HiMiniExclamationTriangle className="text-orange-700" />
+            <div className="flex size-7 items-center justify-center rounded-sm bg-red-100">
+              <HiShoppingBag className="text-red-500" />
+            </div>
           </div>
 
           {isFetching ? (

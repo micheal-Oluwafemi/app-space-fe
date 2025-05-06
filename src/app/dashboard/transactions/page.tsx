@@ -18,17 +18,18 @@ import {
 import { Loader2 } from "lucide-react";
 import { transactionMockData } from "@/constants";
 import { formatter } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 const page = () => {
+  const [isFetching, setIsFetching] = useState(false);
   const [filters, setFilters] = useState<{ status: string | null }>({
     status: "All",
   });
-  const [isFetching, setIsFetching] = useState(false);
 
   const statuses = {
-    Pending: <p className={"bg-amber-500"}>Pending</p>,
-    Success: <p className={"bg-green-700"}>Success</p>,
-    Failed: <p className="bg-red-500">Failed</p>,
+    Pending: <Badge className={"bg-amber-500"}>Pending</Badge>,
+    Success: <Badge className={"bg-green-700"}>Success</Badge>,
+    Failed: <Badge className="bg-red-500">Failed</Badge>,
   };
 
   return (
@@ -39,18 +40,32 @@ const page = () => {
         <TransactionCards isFetching={isFetching} />
         <TransactionFilters setFilters={setFilters} filters={filters} />
 
-        <div className="mt-14 bg-white shadow-none">
+        <div className="mt-14 rounded-lg bg-gray-50 p-3 shadow-none">
+          <div className="mb-3">
+            <h2 className="text-xl font-bold">
+              {filters.status == "All" || !filters.status
+                ? "Transactions"
+                : `${filters.status} Transactions`}
+            </h2>
+          </div>
+
           <Table>
-            <TableCaption>View and manage customer transactions</TableCaption>
+            <TableCaption>View and manage transactions</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead>Ref ID</TableHead>
-                <TableHead>Fulfillment Status</TableHead>
-                <TableHead>Payment Status</TableHead>
-                <TableHead>Total</TableHead>
-                <TableHead>Delivery Method</TableHead>
-                <TableHead>Channel</TableHead>
-                <TableHead>Date</TableHead>
+                <TableHead className="text-xs font-medium">Ref ID</TableHead>
+                <TableHead className="text-xs font-medium">
+                  Fulfillment Status
+                </TableHead>
+                <TableHead className="text-xs font-medium">
+                  Payment Status
+                </TableHead>
+                <TableHead className="text-xs font-medium">Total</TableHead>
+                <TableHead className="text-xs font-medium">
+                  Delivery Method
+                </TableHead>
+                <TableHead className="text-xs font-medium">Channel</TableHead>
+                <TableHead className="text-xs font-medium">Date</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -65,10 +80,7 @@ const page = () => {
               ) : (
                 transactionMockData.map((transaction, index) => {
                   return (
-                    <TableRow
-                      className="cursor-pointer"
-                      // onClick={() => setOpen(true)}
-                    >
+                    <TableRow key={index} className="cursor-pointer">
                       <TableCell>{transaction.ref}</TableCell>
                       <TableCell>{transaction.date}</TableCell>
                       <TableCell>{statuses["Pending"]}</TableCell>
