@@ -20,10 +20,9 @@ import { transactionMockData } from "@/constants";
 import { formatter } from "@/lib/utils";
 
 const page = () => {
-  const [filters, setFilters] = useState({
-    status: null,
+  const [filters, setFilters] = useState<{ status: string | null }>({
+    status: "All",
   });
-
   const [isFetching, setIsFetching] = useState(false);
 
   const statuses = {
