@@ -28,7 +28,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
       setState: setIsLoading,
     });
 
-    if (err || !data.user) return;
+    if (err || !data.user) return; // If there's an error or no user, just return.
 
     setLoggedIn(true);
     dispatch(globalUserLogin(data.user));
@@ -38,17 +38,19 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
     getCurrentUser();
   }, []);
 
+  // Handle navigation based on login status
+  useEffect(() => {
+    if (!isLoggedIn && !loggedIn) {
+      navigate.push("/auth/login");
+    }
+  }, [isLoggedIn, loggedIn, navigate]);
+
   if (isLoading) {
     return (
       <div className="bg-baseColor-light/20 flex h-dvh flex-col items-center justify-center">
         <div className="loader animate-pulse"></div>
       </div>
     );
-  }
-
-  if (!isLoggedIn && !loggedIn) {
-    navigate.push("/auth/login");
-    return null; // Ensure to return null when navigating
   }
 
   return (
