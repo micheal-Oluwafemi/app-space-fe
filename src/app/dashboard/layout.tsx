@@ -11,41 +11,46 @@ import { useRouter } from "next/navigation";
 import { globalUserLogin } from "@/redux/reducers/userReducer";
 import { useMediaQuery } from "react-responsive";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
   const [closeSidebar, setCloseSidebar] = useState(true);
   const isMobile = useMediaQuery({ query: "(max-width: 1100px)" });
   const { isLoggedIn } = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
   const navigate = useRouter();
 
-  console.log(isLoggedIn);
-
   const getCurrentUser = async () => {
-    setLoggedIn(false);
+    const storedUser = localStorage.getItem("user");
+
+    if (storedUser) {
+      const user: UserDataTypes = JSON.parse(storedUser);
+      dispatch(globalUserLogin(user));
+      return;
+    }
+
     const { data, err } = await GetRequest({
       url: "/api/profile",
       setState: setIsLoading,
     });
 
-    if (err || !data.user) return; // If there's an error or no user, just return.
-
-    setLoggedIn(true);
-    dispatch(globalUserLogin(data.user));
+    if (!err) {
+      dispatch(globalUserLogin(data.user));
+    } else {
+      toast.error(err);
+    }
   };
 
   useEffect(() => {
     getCurrentUser();
   }, []);
 
-  // Handle navigation based on login status
   useEffect(() => {
-    if (!isLoggedIn && !loggedIn) {
+    if (!isLoggedIn) {
       navigate.push("/auth/login");
     }
-  }, [isLoggedIn, loggedIn]);
+  }, [isLoggedIn]);
 
   if (isLoading) {
     return (

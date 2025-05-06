@@ -1,32 +1,56 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState = {
-  user: null,
-  email: "",
+interface User {
+  email: string;
+}
+
+interface UserState {
+  user: User | null;
+  email: string;
+  setSelectedStore: string;
+  isLoggedIn: boolean;
+}
+
+const initialState: UserState = {
+  user:
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("user") || "null")
+      : null,
+  email:
+    typeof window !== "undefined" ? localStorage.getItem("email") || "" : "",
   setSelectedStore: "",
-  hasOnboarded: {
-    storeUrl: "",
-  },
-  isLoggedIn: false,
+
+  isLoggedIn:
+    typeof window !== "undefined" ? !!localStorage.getItem("user") : false,
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    globalUserLogin: (state, action) => {
+    globalUserLogin: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
       state.email = action.payload.email;
       state.isLoggedIn = true;
+      if (typeof window !== "undefined") {
+        localStorage.setItem("user", JSON.stringify(action.payload));
+        localStorage.setItem("email", action.payload.email);
+      }
     },
     globalUserLogout: (state) => {
       state.user = null;
       state.email = "";
       state.isLoggedIn = false;
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("user");
+        localStorage.removeItem("email");
+      }
     },
-    setSelectedStore: (state, action) => {
+    setSelectedStore: (state, action: PayloadAction<string>) => {
       state.setSelectedStore = action.payload;
-      localStorage.setItem("selectedStore", action.payload);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("selectedStore", action.payload);
+      }
     },
   },
 });
