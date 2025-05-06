@@ -1,7 +1,7 @@
 "use client";
 
 import "../globals.css";
-import { Provider, useDispatch } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import store from "@/redux/store";
 import Sidebar from "@/components/Sidebar";
 import TopNavbar from "@/components/TopNavbar";
@@ -14,24 +14,24 @@ import { cn } from "@/lib/utils";
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [closeSidebar, setCloseSidebar] = useState(true);
   const isMobile = useMediaQuery({ query: "(max-width: 1100px)" });
-
+  const { isLoggedIn } = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
-
   const navigate = useRouter();
 
   const getCurrentUser = async () => {
+    setLoggedIn(false);
     const { data, err } = await GetRequest({
       url: "/api/profile",
       setState: setIsLoading,
     });
 
-    if (!err) {
-      dispatch(globalUserLogin(data.user));
-    } else {
-      navigate.replace("/auth/login");
-    }
+    if (err || !data.user) return;
+
+    setLoggedIn(true);
+    dispatch(globalUserLogin(data.user));
   };
 
   useEffect(() => {
@@ -41,10 +41,14 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
   if (isLoading) {
     return (
       <div className="bg-baseColor-light/20 flex h-dvh flex-col items-center justify-center">
-        {/* <img src="/icons/logoIcon.png" alt="logo-icon" className="w-32" /> */}
         <div className="loader animate-pulse"></div>
       </div>
     );
+  }
+
+  if (!isLoggedIn && !loggedIn) {
+    navigate.push("/auth/login");
+    return null; // Ensure to return null when navigating
   }
 
   return (

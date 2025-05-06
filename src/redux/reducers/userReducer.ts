@@ -7,7 +7,7 @@ const initialState = {
   hasOnboarded: {
     storeUrl: "",
   },
-  isAuthenticated: false,
+  isLoggedIn: false,
 };
 
 const userSlice = createSlice({
@@ -17,12 +17,12 @@ const userSlice = createSlice({
     globalUserLogin: (state, action) => {
       state.user = action.payload;
       state.email = action.payload.email;
-      state.isAuthenticated = true;
+      state.isLoggedIn = true;
     },
     globalUserLogout: (state) => {
       state.user = null;
       state.email = "";
-      state.isAuthenticated = false;
+      state.isLoggedIn = false;
     },
     setSelectedStore: (state, action) => {
       state.setSelectedStore = action.payload;
