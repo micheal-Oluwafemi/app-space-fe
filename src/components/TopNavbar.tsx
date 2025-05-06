@@ -177,7 +177,7 @@ const TopNavbar = ({ setCloseSidebar }: TopNavbarProps) => {
               <CgMenuRight size={20} />
             </div>
 
-            <img src="/icons/logo.png" alt="logo" className="w-40" />
+            {/* <img src="/icons/logo.png" alt="logo" className="w-40" /> */}
           </div>
 
           <div className="flex items-center gap-x-2">
@@ -258,7 +258,7 @@ const TopNavbar = ({ setCloseSidebar }: TopNavbarProps) => {
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="rounded-md bg-gray-200/50 p-2 px-3 text-sm font-semibold text-gray-800"
+                    className="cursor-pointer rounded-md bg-gray-200/50 p-2 px-3 text-sm font-semibold text-gray-800"
                   >
                     <p className="">
                       Active Service:{" "}
@@ -280,7 +280,7 @@ const TopNavbar = ({ setCloseSidebar }: TopNavbarProps) => {
                     </div>
 
                     <div className="h-full">
-                      {!refetch ? (
+                      {/* {!refetch ? (
                         <Button
                           onClick={() => setRecallFn(!recallFn)}
                           className=""
@@ -289,7 +289,7 @@ const TopNavbar = ({ setCloseSidebar }: TopNavbarProps) => {
                         </Button>
                       ) : (
                         ""
-                      )}
+                      )} */}
 
                       {isLoading ? (
                         <div className="flex h-full items-center justify-center">

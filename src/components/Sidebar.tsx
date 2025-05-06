@@ -20,6 +20,10 @@ const Sidebar = ({ closeSidebar }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
+  const isStoreItemActive = storeMenuItems.some(
+    (item) => pathname === item.link,
+  );
+
   return (
     <div
       className={cn(
@@ -57,7 +61,7 @@ const Sidebar = ({ closeSidebar }: SidebarProps) => {
       </div>
 
       <Collapsible
-        open={isOpen}
+        open={isStoreItemActive || isOpen}
         onOpenChange={setIsOpen}
         className="w-full border-y py-3"
       >
@@ -72,15 +76,16 @@ const Sidebar = ({ closeSidebar }: SidebarProps) => {
             <ChevronRight
               size={16}
               className={cn("text-gray-700 transition-transform duration-200", {
-                "ml-3 rotate-90": !closeSidebar && isOpen,
+                "ml-3 rotate-90":
+                  !closeSidebar && (isOpen || isStoreItemActive),
                 "ml-3": !closeSidebar,
-                "rotate-90": isOpen && closeSidebar,
+                "rotate-90": (isOpen || isStoreItemActive) && closeSidebar,
               })}
             />
           </div>
         </CollapsibleTrigger>
 
-        <CollapsibleContent className={cn("space-y-2x mt-2")}>
+        <CollapsibleContent className={cn("space-y-2x mt-3")}>
           {storeMenuItems.map((item) => (
             <Link
               href={item.link}
@@ -93,6 +98,7 @@ const Sidebar = ({ closeSidebar }: SidebarProps) => {
                 size={24}
                 className={`${pathname === item.link ? "text-baseColor" : "text-gray-600"}`}
               />
+
               {closeSidebar && (
                 <span
                   className={`text-sm font-medium ${

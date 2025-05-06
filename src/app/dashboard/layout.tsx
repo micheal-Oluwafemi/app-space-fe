@@ -69,7 +69,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
           <Sidebar closeSidebar={closeSidebar} />
         </div>
 
-        <main className="dark:bg-darkBg no-scrollbar z-30 mt-[21px] max-h-dvh flex-1 overflow-y-auto bg-white p-3 pt-10 lg:px-5">
+        <main className="no-scrollbar z-30 mt-[21px] max-h-dvh flex-1 overflow-y-auto bg-white p-3 pt-10 lg:px-5">
           {children}
         </main>
       </div>

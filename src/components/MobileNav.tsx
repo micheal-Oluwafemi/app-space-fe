@@ -16,12 +16,18 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "./ui/button";
 import { AiOutlineCaretDown } from "react-icons/ai";
-import { ArrowDown, ChevronDown, ChevronsUpDown, Loader2 } from "lucide-react";
+import {
+  ArrowDown,
+  ChevronDown,
+  ChevronRight,
+  ChevronsUpDown,
+  Loader2,
+} from "lucide-react";
 import { FiCheck } from "react-icons/fi";
 import { AllStoresTypes } from "@/types/dashboard/store.types";
 import { menuItems, storeMenuItems } from "@/constants";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Collapsible,
   CollapsibleContent,
@@ -30,6 +36,7 @@ import {
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setSelectedStore } from "@/redux/reducers/userReducer";
+import { cn } from "@/lib/utils";
 
 interface MobileNavProps {
   activeStore: string;
@@ -49,8 +56,8 @@ const MobileNav = ({
 }: MobileNavProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
-
   const pathname = usePathname();
+  const navigate = useRouter();
 
   return (
     <div>
@@ -64,10 +71,16 @@ const MobileNav = ({
               <img src="/icons/logo.png" alt="logo" className="w-40" />
             </SheetTitle>
           </SheetHeader>
+
           <div className="w-full space-y-3 border-b px-3 pb-6">
-            <button className="text-baseColor border-baseColor h-12 w-full cursor-pointer rounded-md border text-sm font-medium">
-              View Store
-            </button>
+            <SheetClose asChild>
+              <button
+                onClick={() => navigate.push("/dashboard/store/information")}
+                className="text-baseColor border-baseColor h-12 w-full cursor-pointer rounded-md border text-sm font-medium"
+              >
+                View Store
+              </button>
+            </SheetClose>
 
             {/* Showing Store Data */}
             <div className="flex w-full flex-col gap-2">
@@ -87,7 +100,7 @@ const MobileNav = ({
                     <AiOutlineCaretDown className="size-3 transition-transform duration-200 ease-in-out group-data-[state=open]:rotate-180" />
                   </Button>
                 </PopoverTrigger>{" "}
-                <PopoverContent className="max-h-[300px] w-[400px] md:w-full">
+                <PopoverContent className="max-h-[300px] w-full">
                   <div className="flex h-full flex-col gap-4">
                     <div className="space-y-2">
                       <h4 className="leading-none font-medium">All Stores</h4>
@@ -136,7 +149,8 @@ const MobileNav = ({
           </div>
 
           <div className="flex flex-col gap-2 px-3">
-            <p className="text-sm">Platform</p>
+            <p className="text-sm font-medium">Platform</p>
+
             {menuItems.map((item) => (
               <SheetClose asChild key={item.title}>
                 <Link
@@ -166,11 +180,19 @@ const MobileNav = ({
           >
             <CollapsibleTrigger asChild>
               <div className="flex cursor-pointer items-center justify-between">
-                <h4 className="text-base font-semibold text-gray-700">
+                <h4 className="text-sm font-medium text-gray-700">
                   My Storefront
                 </h4>
 
-                <ChevronDown size={16} className="text-gray-700" />
+                <ChevronRight
+                  size={16}
+                  className={cn(
+                    "text-gray-700 transition-transform duration-200 ease-in-out",
+                    {
+                      "rotate-90": isOpen,
+                    },
+                  )}
+                />
               </div>
             </CollapsibleTrigger>
 

@@ -152,7 +152,7 @@ const SetupStore = () => {
       ? `/api/store/${storeCode}/update`
       : "/api/store/create";
 
-    const { data, err } = await PostRequest({
+    const { err } = await PostRequest({
       url: endpoint,
       body: submitData,
       setState: setIsSubmitting,
@@ -212,12 +212,12 @@ const SetupStore = () => {
   return (
     <div className="w-full pt-5 pb-10 lg:flex lg:items-center lg:justify-center lg:pb-0">
       <div className="">
-        <div className="flex w-full items-center justify-between">
+        <div className="flex w-full flex-col justify-between gap-3 lg:flex-row lg:items-center">
           <PageHeaders pageType="Store Information" />
 
           <button
             onClick={toggleEditMode}
-            className={`flex cursor-pointer items-center gap-2 rounded-md border-[1.4px] p-2 px-3 ${
+            className={`flex w-fit cursor-pointer items-center gap-2 rounded-md border-[1.4px] p-2 px-3 ${
               isEditable
                 ? "border-orange-500 text-orange-500"
                 : "border-baseColor text-baseColor"

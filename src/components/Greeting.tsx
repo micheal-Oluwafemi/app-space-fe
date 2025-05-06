@@ -25,7 +25,7 @@ const Greeting = ({ name }: { name: string }) => {
 
   return (
     <div className="">
-      <h1 className="text-2xl leading-[1.2] font-bold text-black/80 lg:text-4xl">
+      <h1 className="text-2xl leading-[1.2] font-bold text-black/80 lg:text-3xl">
         {greeting}! {name}
       </h1>
     </div>

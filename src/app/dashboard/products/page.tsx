@@ -34,10 +34,10 @@ const page = () => {
 
   return (
     <div className="h-full w-full pt-5 pb-10">
-      <div className="flex w-full flex-col items-center justify-between lg:flex-row">
+      <div className="flex w-full flex-col justify-between gap-3 lg:flex-row lg:items-center">
         <PageHeaders pageType="Products" />
 
-        <Button className="cursor-pointer font-medium text-white">
+        <Button className="w-fit cursor-pointer font-medium text-white">
           Create Product
         </Button>
       </div>
@@ -81,21 +81,17 @@ const page = () => {
                 </TableCell>
               </TableRow>
             ) : (
-              productMockData.map((transaction, index) => {
-                return (
-                  <TableRow className="cursor-pointer" key={index}>
-                    <TableCell>{transaction.ref}</TableCell>
-                    <TableCell>{transaction.primary_name}</TableCell>
-                    <TableCell>{transaction.collection}</TableCell>
-                    <TableCell>{transaction.variation}</TableCell>
-                    <TableCell>{transaction.in_stock}</TableCell>
-                    <TableCell>
-                      ₦{formatter.format(transaction.price)}
-                    </TableCell>
-                    <TableCell>{statuses["Success"]}</TableCell>{" "}
-                  </TableRow>
-                );
-              })
+              productMockData.map((product, index) => (
+                <TableRow className="cursor-pointer" key={index}>
+                  <TableCell>{product.ref}</TableCell>
+                  <TableCell>{product.primary_name}</TableCell>
+                  <TableCell>{product.collection}</TableCell>
+                  <TableCell>{product.variation}</TableCell>
+                  <TableCell>{product.in_stock}</TableCell>
+                  <TableCell>₦{formatter.format(product.price)}</TableCell>
+                  <TableCell>{statuses["Success"]}</TableCell>
+                </TableRow>
+              ))
             )}
           </TableBody>
           <TableFooter>

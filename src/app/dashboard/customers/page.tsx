@@ -29,16 +29,16 @@ const page = () => {
     <div className="h-full w-full pt-5 pb-10">
       <div className="flex w-full flex-col items-center justify-between lg:flex-row">
         <PageHeaders pageType="Customers" />
-
         <Button className="cursor-pointer font-medium text-white">
           Add Customer
         </Button>
       </div>
-
       <CustomerCards isFetching={isFetching} />
-
       <div>
         <div className="mt-14 rounded-lg bg-gray-50 p-2 shadow-sm">
+          <div className="mb-3">
+            <h2 className="text-xl font-bold">All Customers</h2>
+          </div>
           <Table>
             <TableCaption>View and manage products</TableCaption>
             <TableHeader>
@@ -64,34 +64,22 @@ const page = () => {
                   </TableCell>
                 </TableRow>
               ) : (
-                customerMockData.map((customer, index) => {
-                  return (
-                    <TableRow
-                      key={index}
-                      className="cursor-pointer"
-                      // onClick={() => setOpen(true)}
-                    >
-                      <TableCell>{customer.name}</TableCell>
-                      <TableCell>{customer.username}</TableCell>
-                      <TableCell>{customer.email}</TableCell>
-                      <TableCell>{customer.phone}</TableCell>
-                      <TableCell>
-                        {statuses[customer.status as keyof typeof statuses]}
-                      </TableCell>{" "}
-                    </TableRow>
-                  );
-                })
+                customerMockData.map((customer, index) => (
+                  <TableRow key={index} className="cursor-pointer">
+                    <TableCell>{customer.name}</TableCell>
+                    <TableCell>{customer.username}</TableCell>
+                    <TableCell>{customer.email}</TableCell>
+                    <TableCell>{customer.phone}</TableCell>
+                    <TableCell>
+                      {statuses[customer.status as keyof typeof statuses]}
+                    </TableCell>
+                  </TableRow>
+                ))
               )}
             </TableBody>
             <TableFooter>
               <TableRow>
-                <TableCell colSpan={6}>
-                  {/* <Paginator
-                    currentPage={paginationSettings.currentPage}
-                    maxPage={paginationSettings.maxPage}
-                    onNavigate={getTransactions}
-                  /> */}
-                </TableCell>
+                <TableCell colSpan={6}></TableCell>
               </TableRow>
             </TableFooter>
           </Table>

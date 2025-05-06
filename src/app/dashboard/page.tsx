@@ -9,7 +9,7 @@ const page = () => {
   console.log(userData);
 
   return (
-    <div className="flex flex-col">
+    <div className="h-full w-full pt-3 pb-10">
       <Greeting name={userData?.first_name} />
     </div>
   );
