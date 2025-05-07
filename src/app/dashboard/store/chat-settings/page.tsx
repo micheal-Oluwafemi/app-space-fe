@@ -62,6 +62,7 @@ const page = () => {
             type={toggle}
             register={register}
             errors={errors}
+            watch={watch}
           />
         </div>
       </div>

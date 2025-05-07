@@ -210,7 +210,7 @@ const SetupStore = () => {
   };
 
   return (
-    <div className="w-full pt-3 pb-10 lg:flex lg:items-center lg:justify-center lg:pb-0">
+    <div className="mr-auto w-full max-w-5xl pt-3 pb-10">
       <div className="">
         <div className="flex w-full flex-col justify-between gap-3 lg:flex-row lg:items-center">
           <PageHeaders pageType="Store Information" />
@@ -236,7 +236,8 @@ const SetupStore = () => {
             )}
           </button>
         </div>
-        <div className="mt-8 lg:w-[700px]">
+
+        <div className="mt-8">
           {isLoading ? (
             <div className="flex items-center justify-center py-10">
               <Loader2 className="mr-2 animate-spin" />

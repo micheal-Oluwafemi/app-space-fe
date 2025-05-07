@@ -1,13 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
+import Image from "next/image";
+import { X } from "lucide-react";
+import { watch } from "fs";
+import { Button } from "@/components/ui/button";
 type ChatProviderSelectionProps = {
   type: string;
   register: any;
   errors: any;
+  watch: any;
 };
 
 type ChatProvider = "whatsapp" | "chatbot";
@@ -16,9 +21,41 @@ export default function ChatProviderSelection({
   type,
   register,
   errors,
+  watch,
 }: ChatProviderSelectionProps) {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedProvider, setSelectedProvider] =
     useState<ChatProvider>("chatbot");
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const displayName = watch("display_name");
+  const responseTimeMessage = watch("response_time_message");
+  const whatsappNumber = watch("whatsapp_number");
+  const whatsappMessage = watch("default_whatsapp_message");
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setSelectedImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const removeImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
   return (
     <div className="mt-7 w-full">
@@ -250,11 +287,140 @@ export default function ChatProviderSelection({
           </motion.div>
         )}
       </AnimatePresence>{" "}
-      {type === "active" && (
+      {type === "active" && selectedProvider === "whatsapp" && (
         <div className="mt-10">
           <h3 className="font-semibold">Chat Appearance</h3>
 
-          <div></div>
+          <div className="mt-3 mb-4 rounded-md bg-white p-4 shadow-sm">
+            <h2 className="mb-2 text-sm font-semibold text-gray-700">
+              Chat Avatar
+            </h2>
+
+            {/* <p className="mb-3 text-sm text-gray-500">Upload Chat Avatar</p> */}
+
+            <div
+              onClick={handleImageClick}
+              className="relative flex size-36 cursor-pointer items-center justify-center overflow-hidden rounded-md border"
+            >
+              {selectedImage ? (
+                <>
+                  <Image
+                    src={selectedImage || "/placeholder.svg"}
+                    alt="Store Logo"
+                    fill
+                    className="object-cover"
+                  />
+                  <button
+                    onClick={removeImage}
+                    className="absolute top-1 right-1 rounded-full bg-white p-1"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <h3 className="text-center">Upload Chat Avatar</h3>
+
+                  <div className="absolute top-1 right-1 rounded-full bg-white p-1">
+                    <X className="h-4 w-4" />
+                  </div>
+                  <div className="bg-opacity-60 absolute right-0 bottom-0 left-0 bg-black py-1 text-center text-xs text-white">
+                    Change Image
+                  </div>
+                </>
+              )}
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                accept="image/*"
+                className="hidden"
+              />
+            </div>
+
+            <div>
+              <h3 className="mt-5 mb-2 text-sm font-semibold text-gray-700">
+                Preview
+              </h3>
+
+              <div className="mr-auto max-w-sm rounded-lg border shadow-md">
+                <div className="flex items-center rounded-t-lg bg-green-700 p-3 text-white">
+                  <div className="mr-3 h-8 w-8 overflow-hidden rounded-full bg-white">
+                    {selectedImage ? (
+                      <img
+                        src={selectedImage}
+                        alt="Avatar"
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="h-full w-full bg-gray-300"></div>
+                    )}
+                  </div>
+                  <div>
+                    <div className="font-semibold">{displayName}</div>
+                    <div className="text-xs">
+                      {responseTimeMessage ||
+                        "Typically replies within 10 minutes"}
+                    </div>
+                  </div>
+                  <button className="ml-auto text-white">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div className="bg-gray-100 p-4">
+                  <div className="mb-2 inline-block max-w-[80%] rounded-lg bg-white p-3">
+                    <p className="text-sm">
+                      {whatsappMessage ||
+                        "Hi, welcome to our store! How can we help you today? 😊"}
+                    </p>
+                    <span className="block text-right text-xs text-gray-500">
+                      11:38 AM ✓
+                    </span>
+                  </div>
+                  <div className="flex">
+                    <input
+                      type="text"
+                      placeholder="Type a message..."
+                      className="flex-1 rounded-lg border p-2 text-sm"
+                      disabled
+                    />
+                    <button className="ml-2 flex h-8 w-8 items-center justify-center rounded-full bg-green-500 text-white">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <Button
+            type="button"
+            className="bg-baseColor hover:bg-baseColor-light h-12 w-full cursor-pointer"
+          >
+            Save Changes
+          </Button>
         </div>
       )}
     </div>
