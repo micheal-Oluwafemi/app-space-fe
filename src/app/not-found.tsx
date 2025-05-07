@@ -62,7 +62,7 @@ const NotFound = () => {
         {/* Action Buttons */}
         <div className="mt-6 flex justify-center space-x-6">
           <button
-            onClick={() => navigate.push("/dashboard")}
+            onClick={() => navigate.push("/")}
             className="rounded-md bg-gray-800 px-6 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-gray-900"
           >
             Go Home

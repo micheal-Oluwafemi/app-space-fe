@@ -1,3 +1,4 @@
+import store from "@/redux/store";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface User {
@@ -7,21 +8,17 @@ interface User {
 interface UserState {
   user: User | null;
   email: string;
-  setSelectedStore: string;
+  storeCode: string;
+  storeID: string;
   isLoggedIn: boolean;
 }
 
 const initialState: UserState = {
-  user:
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("user") || "null")
-      : null,
-  email:
-    typeof window !== "undefined" ? localStorage.getItem("email") || "" : "",
-  setSelectedStore: "",
-
-  isLoggedIn:
-    typeof window !== "undefined" ? !!localStorage.getItem("user") : false,
+  user: null,
+  email: "",
+  storeCode: "",
+  storeID: "",
+  isLoggedIn: false,
 };
 
 const userSlice = createSlice({
@@ -32,10 +29,6 @@ const userSlice = createSlice({
       state.user = action.payload;
       state.email = action.payload.email;
       state.isLoggedIn = true;
-      if (typeof window !== "undefined") {
-        localStorage.setItem("user", JSON.stringify(action.payload));
-        localStorage.setItem("email", action.payload.email);
-      }
     },
     globalUserLogout: (state) => {
       state.user = null;
@@ -46,15 +39,21 @@ const userSlice = createSlice({
         localStorage.removeItem("email");
       }
     },
-    setSelectedStore: (state, action: PayloadAction<string>) => {
-      state.setSelectedStore = action.payload;
+    storeCode: (state, action: PayloadAction<string>) => {
+      state.storeCode = action.payload;
       if (typeof window !== "undefined") {
-        localStorage.setItem("selectedStore", action.payload);
+        localStorage.setItem("storeCode", action.payload);
+      }
+    },
+    storeID: (state, action: PayloadAction<string>) => {
+      state.storeID = action.payload;
+      if (typeof window !== "undefined") {
+        localStorage.setItem("storeID", action.payload);
       }
     },
   },
 });
 
-export const { globalUserLogin, globalUserLogout, setSelectedStore } =
+export const { globalUserLogin, globalUserLogout, storeCode, storeID } =
   userSlice.actions;
 export default userSlice.reducer;

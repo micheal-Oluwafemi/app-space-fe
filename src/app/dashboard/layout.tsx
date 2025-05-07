@@ -11,46 +11,48 @@ import { useRouter } from "next/navigation";
 import { globalUserLogin } from "@/redux/reducers/userReducer";
 import { useMediaQuery } from "react-responsive";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
   const [closeSidebar, setCloseSidebar] = useState(true);
-  const isMobile = useMediaQuery({ query: "(max-width: 1100px)" });
-  const { isLoggedIn } = useSelector((state: any) => state.user);
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const [loggedIn, setLoggedIn] = useState(false);
   const dispatch = useDispatch();
   const navigate = useRouter();
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setToken(localStorage.getItem("user-token"));
+    }
+  }, []);
 
   const getCurrentUser = async () => {
-    const storedUser = localStorage.getItem("user");
-
-    if (storedUser) {
-      const user: UserDataTypes = JSON.parse(storedUser);
-      dispatch(globalUserLogin(user));
-      return;
-    }
-
+    setLoggedIn(false);
     const { data, err } = await GetRequest({
       url: "/api/profile",
       setState: setIsLoading,
     });
 
-    if (!err) {
-      dispatch(globalUserLogin(data.user));
-    } else {
-      toast.error(err);
+    if (err || !data?.user || !token) {
+      setLoggedIn(true);
+      navigate.push("/");
+      return;
     }
+
+    dispatch(globalUserLogin(data.user));
+    setLoggedIn(true);
   };
 
-  useEffect(() => {
-    getCurrentUser();
-  }, []);
+  // useEffect(() => {
+  //   getCurrentUser();
+  // }, []);
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate.push("/auth/login");
-    }
-  }, [isLoggedIn]);
+  // useEffect(() => {
+  //   if (!token) {
+  //     navigate.push("/");
+  //   }
+  // }, []);
 
   if (isLoading) {
     return (
@@ -61,15 +63,11 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="font-geist relative h-dvh w-full">
-      <div className="fixed top-0 z-50 w-full">
-        <TopNavbar setCloseSidebar={setCloseSidebar} />
-      </div>
-
-      <div className="flex h-full items-start justify-between">
+    <div className="font-geist relative flex h-dvh w-full flex-col">
+      <div className="flex flex-1 items-start justify-between overflow-hidden">
         <div
           className={cn(
-            "flex h-full items-start justify-start overflow-hidden border-r border-gray-200 transition-all duration-300",
+            "flex h-dvh items-start justify-start overflow-hidden border-r border-gray-200 bg-white transition-all duration-300",
             {
               "w-[250px]": closeSidebar,
               "w-[65px]": !closeSidebar,
@@ -77,11 +75,16 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
             },
           )}
         >
-          <Sidebar closeSidebar={closeSidebar} />
+          <Sidebar
+            closeSidebar={closeSidebar}
+            setCloseSidebar={setCloseSidebar}
+          />
         </div>
 
-        <main className="no-scrollbar z-30 mt-[21px] max-h-dvh flex-1 overflow-y-auto bg-white p-3 pt-10 lg:px-5">
-          {children}
+        <main className="no-scrollbar z-30 ml-auto max-h-dvh flex-1 overflow-y-auto bg-white">
+          <TopNavbar setCloseSidebar={setCloseSidebar} />
+
+          <div className="p-3 lg:px-5">{children}</div>
         </main>
       </div>
     </div>

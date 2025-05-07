@@ -30,7 +30,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 import MobileNav from "./MobileNav";
-import { setSelectedStore } from "@/redux/reducers/userReducer";
+import { storeCode, storeID } from "@/redux/reducers/userReducer";
 import { BiSolidUserPin } from "react-icons/bi";
 
 interface TopNavbarProps {
@@ -51,7 +51,7 @@ const TopNavbar = ({ setCloseSidebar }: TopNavbarProps) => {
   const navigate = useRouter();
 
   const dispatch = useDispatch();
-  const isMobile = useMediaQuery({ query: "(max-width: 1100px)" });
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const dropdownRef = useRef(null);
   const avatarRef = useRef(null);
 
@@ -70,8 +70,8 @@ const TopNavbar = ({ setCloseSidebar }: TopNavbarProps) => {
       if (data.data.data.length > 0) {
         const firstStore = data.data.data[0];
         setActiveStore(firstStore.store_name);
-        localStorage.setItem("selectedStore", firstStore.id);
-        dispatch(setSelectedStore(firstStore.id));
+        dispatch(storeID(firstStore.id));
+        dispatch(storeCode(firstStore.store_code));
       }
     } else {
       setRefetch(true);
@@ -91,7 +91,8 @@ const TopNavbar = ({ setCloseSidebar }: TopNavbarProps) => {
     if (!err) {
       toast.success("Logged out successfully");
       localStorage.removeItem("user-token");
-      localStorage.removeItem("selectedStore");
+      localStorage.removeItem("storeCode");
+      localStorage.removeItem("storeID");
       navigate.push("/login");
     } else {
       toast.error(err);
@@ -159,7 +160,7 @@ const TopNavbar = ({ setCloseSidebar }: TopNavbarProps) => {
   return (
     <div className="relative bg-white">
       {isMobile ? (
-        <div className="flex w-full items-center justify-between border-b pr-4">
+        <div className="flex w-full items-center justify-between border-b px-4">
           <div className="flex items-center gap-4 py-4 lg:p-3">
             <MobileNav
               StoreData={stores}
@@ -170,14 +171,12 @@ const TopNavbar = ({ setCloseSidebar }: TopNavbarProps) => {
               setOpenNav={setOpenNav}
             />
 
-            <div
+            <span
               onClick={() => setOpenNav((prev) => !prev)}
               className="flex cursor-pointer items-center justify-center rounded bg-gray-200/60 p-1"
             >
               <CgMenuRight size={20} />
-            </div>
-
-            {/* <img src="/icons/logo.png" alt="logo" className="w-40" /> */}
+            </span>
           </div>
 
           <div className="flex items-center gap-x-2">
@@ -240,18 +239,7 @@ const TopNavbar = ({ setCloseSidebar }: TopNavbarProps) => {
           </AnimatePresence>
         </div>
       ) : (
-        <div className="flex border-b">
-          <div className="flex w-[250px] items-center justify-between border-r p-4">
-            <img src="/icons/logo.png" alt="logo" className="h-6 w-40" />
-
-            <div
-              onClick={() => setCloseSidebar((prev) => !prev)}
-              className="flex cursor-pointer items-center justify-center rounded bg-gray-200/60 p-1"
-            >
-              <CgMenuRight size={20} />
-            </div>
-          </div>
-
+        <div className="flex border-b py-1.5">
           <div className="flex flex-1 justify-between px-5">
             <div className="flex items-center gap-2">
               <Popover>
@@ -310,8 +298,8 @@ const TopNavbar = ({ setCloseSidebar }: TopNavbarProps) => {
                               }`}
                               onClick={() => {
                                 setActiveStore(store.store_name);
-                                dispatch(setSelectedStore(store.id));
-                                localStorage.setItem("selectedStore", store.id);
+                                dispatch(storeID(store.id));
+                                dispatch(storeCode(store.store_code));
                               }}
                             >
                               <p>{store.store_name}</p>

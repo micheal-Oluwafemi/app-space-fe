@@ -59,10 +59,9 @@ const SetupStore = () => {
     submitData.append("store_logo", selectedImage);
 
     // Add other form fields to FormData
-    const { store_url, ...otherFormData } = formData;
 
-    for (const key in otherFormData) {
-      submitData.append(key, otherFormData[key]);
+    for (const key in formData) {
+      submitData.append(key, formData[key]);
     }
 
     const { err } = await PostRequest({
@@ -121,7 +120,7 @@ const SetupStore = () => {
   }, [storeName, setValue]);
 
   return (
-    <div className="w-full pb-10 lg:flex lg:items-center lg:justify-center lg:pb-0">
+    <div className="mb-10 w-full px-3 pt-8 lg:flex lg:items-center lg:justify-center lg:pb-0">
       <div className="">
         <div className="flex w-full justify-between">
           <div className="space-y-2">
@@ -228,46 +227,6 @@ const SetupStore = () => {
                     {errors.store_abbreviation.message?.toString()}
                   </p>
                 )}
-              </div>
-
-              {/* Store URL */}
-              <div className="space-y-1 lg:col-span-2">
-                <label
-                  htmlFor="store_url"
-                  className="block text-base font-medium text-gray-700"
-                >
-                  Store URL
-                  <span className="text-red-500"> *</span>
-                </label>
-                <div className="flex h-[44px] items-center rounded-md border bg-gray-100 lg:h-12">
-                  <Input
-                    placeholder="e.g. acme"
-                    {...register("store_url", {
-                      required: "This Field is required",
-                      pattern: {
-                        value: /^[a-zA-Z0-9-]+$/,
-                        message:
-                          "The domain may only contain letters, numbers, and dashes are allowed",
-                      },
-                    })}
-                    className="rounded-r-none bg-white text-sm placeholder:text-sm"
-                  />
-                  <div className="">
-                    <p className="px-3 font-medium">.appstore.shop</p>
-                  </div>
-                </div>
-                {errors.store_url && !storeName && (
-                  <p className="text-xs text-red-500">
-                    {errors.store_url.message?.toString()}
-                  </p>
-                )}
-                <p className="flex items-center gap-1 pt-0.5 pl-2 text-xs text-gray-500">
-                  <Info className="size-3" />
-                  You can upgrade your website domain to{" "}
-                  <span className="font-semibold">.com</span>,{" "}
-                  <span className="font-semibold">.com.ng</span> or any domain
-                  of your choice later.
-                </p>
               </div>
 
               {/* Store Industry Type */}

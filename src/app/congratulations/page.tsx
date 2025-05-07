@@ -42,7 +42,7 @@ const SearchParamsWrapperContent = () => {
       </div>
 
       <Link
-        href="/dashboard"
+        href="/"
         className="bg-baseColor hover:bg-baseColor-light w-fit rounded-md px-4 py-2 text-center font-medium text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500"
       >
         Continue
@@ -62,7 +62,7 @@ const SearchParamsWrapperContent = () => {
       </div>
 
       <Link
-        href="/auth/login"
+        href="/"
         className="bg-baseColor hover:bg-baseColor-light w-full rounded-md px-4 py-3 text-center font-medium text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500"
       >
         Continue to Login

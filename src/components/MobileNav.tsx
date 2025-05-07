@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/collapsible";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setSelectedStore } from "@/redux/reducers/userReducer";
+import { storeCode, storeID } from "@/redux/reducers/userReducer";
 import { cn } from "@/lib/utils";
 
 interface MobileNavProps {
@@ -60,7 +60,7 @@ const MobileNav = ({
   const navigate = useRouter();
 
   return (
-    <div>
+    <>
       <Sheet open={openNav} onOpenChange={setOpenNav}>
         <SheetContent
           side="left"
@@ -129,7 +129,8 @@ const MobileNav = ({
                               }`}
                               onClick={() => {
                                 setActiveStore(store.store_name);
-                                dispatch(setSelectedStore(store.id));
+                                dispatch(storeID(store.id));
+                                dispatch(storeCode(store.store_code));
                               }}
                             >
                               <p>{store.store_name}</p>
@@ -221,7 +222,7 @@ const MobileNav = ({
           </Collapsible>
         </SheetContent>
       </Sheet>
-    </div>
+    </>
   );
 };
 

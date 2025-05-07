@@ -17,6 +17,7 @@ import {
 import { Loader2 } from "lucide-react";
 import { customerMockData } from "@/constants";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 const page = () => {
   const [isFetching, setIsFetching] = useState(false);
 
@@ -30,9 +31,12 @@ const page = () => {
       <div className="flex w-full flex-col justify-between gap-3 lg:flex-row lg:items-center">
         <PageHeaders pageType="Customers" />
 
-        <Button className="w-fit cursor-pointer font-medium text-white">
+        <Link
+          href="/dashboard/customers/create"
+          className="w-fit cursor-pointer rounded-md bg-black px-4 py-2 font-medium text-white"
+        >
           Add Customer
-        </Button>
+        </Link>
       </div>
 
       <CustomerCards isFetching={isFetching} />

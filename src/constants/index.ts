@@ -109,7 +109,7 @@ export const storeMenuItems = [
   {
     title: "Customer Support",
     icon: Bot,
-    link: "/dashboard/store/chat",
+    link: "/dashboard/store/chat-settings",
   },
 ];
 

@@ -32,7 +32,7 @@ const SetupStore = () => {
   const [imageError, setImageError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [storeData, setStoreData] = useState<AllStoresTypes>();
-  const storeCode = useSelector((state: any) => state.user.setSelectedStore);
+  const storeCode = useSelector((state: any) => state.user.storeID);
   const dispatch = useDispatch();
   const router = useRouter();
 
