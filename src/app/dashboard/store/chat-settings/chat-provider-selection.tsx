@@ -250,9 +250,13 @@ export default function ChatProviderSelection({
           </motion.div>
         )}
       </AnimatePresence>{" "}
-      <div className="mt-10">
-        <h3 className="font-semibold">Chat Appearance</h3>
-      </div>
+      {type === "active" && (
+        <div className="mt-10">
+          <h3 className="font-semibold">Chat Appearance</h3>
+
+          <div></div>
+        </div>
+      )}
     </div>
   );
 }

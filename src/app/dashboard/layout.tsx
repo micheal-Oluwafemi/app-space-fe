@@ -1,5 +1,4 @@
 "use client";
-
 import "../globals.css";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import store from "@/redux/store";
@@ -13,46 +12,43 @@ import { useMediaQuery } from "react-responsive";
 import { cn } from "@/lib/utils";
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Start with loading true
   const [closeSidebar, setCloseSidebar] = useState(true);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-  const [loggedIn, setLoggedIn] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useRouter();
-  const [token, setToken] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setToken(localStorage.getItem("user-token"));
-    }
-  }, []);
+    const checkAuthAndGetUser = async () => {
+      // Check if token exists
+      const token = localStorage.getItem("user-token");
 
-  const getCurrentUser = async () => {
-    setLoggedIn(false);
-    const { data, err } = await GetRequest({
-      url: "/api/profile",
-      setState: setIsLoading,
-    });
+      if (!token) {
+        // No token found, redirect to login
+        router.push("/");
+        return;
+      }
 
-    if (err || !data?.user || !token) {
-      setLoggedIn(true);
-      navigate.push("/");
-      return;
-    }
+      // Token exists, fetch user data
+      const { data, err } = await GetRequest({
+        url: "/api/profile",
+        setState: setIsLoading,
+      });
 
-    dispatch(globalUserLogin(data.user));
-    setLoggedIn(true);
-  };
+      if (err || !data?.user) {
+        // Error fetching user or user not found
+        localStorage.removeItem("user-token"); // Clear invalid token
+        router.push("/");
+        return;
+      }
 
-  // useEffect(() => {
-  //   getCurrentUser();
-  // }, []);
+      // Success! User is authenticated
+      dispatch(globalUserLogin(data.user));
+      setIsLoading(false);
+    };
 
-  // useEffect(() => {
-  //   if (!token) {
-  //     navigate.push("/");
-  //   }
-  // }, []);
+    checkAuthAndGetUser();
+  }, [dispatch, router]);
 
   if (isLoading) {
     return (
@@ -80,10 +76,8 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
             setCloseSidebar={setCloseSidebar}
           />
         </div>
-
         <main className="no-scrollbar z-30 ml-auto max-h-dvh flex-1 overflow-y-auto bg-white">
           <TopNavbar setCloseSidebar={setCloseSidebar} />
-
           <div className="p-3 lg:px-5">{children}</div>
         </main>
       </div>
